@@ -1,0 +1,43 @@
+version: "3.9"
+
+x-dind: &dind
+  image: cruizba/ubuntu-dind:systemd-latest
+  privileged: true
+  environment:
+    DOCKER_TLS_CERTDIR: "" # disable TLS inside
+  command:
+    [
+      "--host=tcp://0.0.0.0:2375",
+      "--host=unix:///var/run/docker.sock",
+      "--log-level=error",
+    ]
+
+services:
+  lab1:
+    <<: *dind
+    hostname: lab1
+    ports: ["2375:2375"]
+    networks:
+      labnet:
+        ipv4_address: 172.31.0.11
+
+  lab2:
+    <<: *dind
+    hostname: lab2
+    networks:
+      labnet:
+        ipv4_address: 172.31.0.12
+
+  lab3:
+    <<: *dind
+    hostname: lab3
+    networks:
+      labnet:
+        ipv4_address: 172.31.0.13
+
+networks:
+  labnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
