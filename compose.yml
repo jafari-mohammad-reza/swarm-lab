@@ -34,6 +34,17 @@ services:
     networks:
       labnet:
         ipv4_address: 172.31.0.13
+  gitlab:
+    <<: *dind
+    hostname: gitlab
+    ports:
+       - 443:443
+       - 80:80
+    volumes:
+        - ./docker-compose.gitlab.yml:/opt/docker-compose.yml:ro
+    networks:
+      labnet:
+        ipv4_address: 172.31.0.14
 
 networks:
   labnet:
