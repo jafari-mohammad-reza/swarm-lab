@@ -1,0 +1,27 @@
+version: "3.8"
+configs:
+  nginx-default-conf:
+    external: true
+services:
+  webserver:
+    image: nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    configs:
+      - source: nginx-default-conf
+        target: /etc/nginx/sites-enable/default.conf
+    container_name: webserver
+    volumes:
+      - /var/log/nginx:/var/log/nginx
+    deploy:
+      replicas: 3
+      update_config:
+        delay: 10s
+        parallelism: 1
+        failure_action: rollback
+    networks:
+      - lab-network
+networks:
+  lab-network:
+    external: true
