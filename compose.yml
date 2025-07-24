@@ -20,31 +20,63 @@ services:
     networks:
       labnet:
         ipv4_address: 172.31.0.11
-
+    volumes:
+      - lab1:/data
   lab2:
     <<: *dind
     hostname: lab2
     networks:
       labnet:
         ipv4_address: 172.31.0.12
-
+    volumes:
+      - lab2:/data
   lab3:
     <<: *dind
     hostname: lab3
     networks:
       labnet:
         ipv4_address: 172.31.0.13
+    volumes:
+      - lab3:/data
   gitlab:
     <<: *dind
     hostname: gitlab
     ports:
-       - 443:443
-       - 80:80
+      - 443:443
+      - 80:80
     volumes:
-        - ./docker-compose.gitlab.yml:/opt/docker-compose.yml:ro
+      - ./docker-compose.gitlab.yml:/opt/docker-compose.yml:ro
+      - gitlab:/data
+
     networks:
       labnet:
         ipv4_address: 172.31.0.14
+
+volumes:
+  lab1:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vols/lab1
+      o: bind
+  lab2:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vols/lab2
+      o: bind
+  lab3:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vols/lab3
+      o: bind
+  gitlab:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/vols/gitlab
+      o: bind
 
 networks:
   labnet:
