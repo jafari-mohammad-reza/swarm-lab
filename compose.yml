@@ -38,6 +38,17 @@ services:
         ipv4_address: 172.31.0.13
     volumes:
       - lab3:/data
+  nexus:
+    hostname: nexus
+    image: sonatype/nexus3
+    restart: always
+    volumes:
+      - nexus-data:/sonatype-work
+    ports:
+      - "8081:8081"
+    networks:
+      labnet:
+        ipv4_address: 172.31.0.15
   gitlab:
     <<: *dind
     hostname: gitlab
@@ -77,7 +88,7 @@ volumes:
       type: none
       device: ${PWD}/vols/gitlab
       o: bind
-
+  nexus-data:
 networks:
   labnet:
     driver: bridge

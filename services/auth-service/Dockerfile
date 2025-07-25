@@ -1,9 +1,9 @@
-FROM golang:1.24.1-alpine as builder
+FROM golang:1.24.1 as builder
 WORKDIR /opt/app
 COPY . .
 RUN go mod tidy
 RUN go build -o application
-FROM golang:1.24.1-alpine
+FROM golang:1.24.1
 WORKDIR /opt/app
 COPY --from=builder /opt/app/application /opt/app/
 EXPOSE 3000
